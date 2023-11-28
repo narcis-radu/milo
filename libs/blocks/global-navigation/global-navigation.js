@@ -3,6 +3,8 @@ import {
   getConfig,
   getMetadata,
   loadIms,
+  loadScript,
+  loadStyle,
   decorateLinks,
 } from '../../utils/utils.js';
 import {
@@ -47,75 +49,6 @@ const CONFIG = {
     'app-launcher',
     'adobe-logo',
   ],
-};
-
-// signIn, decorateSignIn and decorateProfileTrigger can be removed if IMS takes over the profile
-const signIn = () => {
-  if (typeof window.adobeIMS?.signIn !== 'function') return;
-
-  window.adobeIMS.signIn();
-};
-
-const decorateSignIn = async ({ rawElem, decoratedElem }) => {
-  const dropdownElem = rawElem.querySelector(':scope > div:nth-child(2)');
-  const signInLabel = await replaceKey('sign-in', getFedsPlaceholderConfig(), 'feds');
-  let signInElem;
-
-  if (!dropdownElem) {
-    signInElem = toFragment`<button daa-ll="${signInLabel}" class="feds-signIn">${signInLabel}</button>`;
-
-    signInElem.addEventListener('click', (e) => {
-      e.preventDefault();
-      signIn();
-    });
-  } else {
-    signInElem = toFragment`<button daa-ll="${signInLabel}" class="feds-signIn" aria-expanded="false" aria-haspopup="true">${signInLabel}</button>`;
-
-    signInElem.addEventListener('click', (e) => trigger({ element: signInElem, event: e }));
-    signInElem.addEventListener('keydown', (e) => e.code === 'Escape' && closeAllDropdowns());
-    dropdownElem.addEventListener('keydown', (e) => e.code === 'Escape' && closeAllDropdowns());
-
-    dropdownElem.classList.add('feds-signIn-dropdown');
-
-    const dropdownSignInAnchor = dropdownElem.querySelector('[href$="?sign-in=true"]');
-    if (dropdownSignInAnchor) {
-      const dropdownSignInButton = toFragment`<button class="feds-signIn">${dropdownSignInAnchor.textContent}</button>`;
-      dropdownSignInAnchor.replaceWith(dropdownSignInButton);
-      dropdownSignInButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        signIn();
-      });
-    } else {
-      lanaLog({ message: 'Sign in link not found in dropdown.', tags: 'errorType=warn,module=gnav' });
-    }
-
-    decoratedElem.append(dropdownElem);
-  }
-
-  decoratedElem.prepend(signInElem);
-};
-
-const decorateProfileTrigger = async ({ avatar }) => {
-  const [label, profileAvatar] = await replaceKeyArray(
-    ['profile-button', 'profile-avatar'],
-    getFedsPlaceholderConfig(),
-    'feds',
-  );
-
-  const buttonElem = toFragment`
-    <button
-      class="feds-profile-button"
-      aria-expanded="false"
-      aria-controls="feds-profile-menu"
-      aria-label="${label}"
-      daa-ll="Account"
-      aria-haspopup="true"
-    >
-      <img class="feds-profile-img" src="${avatar}" alt="${profileAvatar}"></img>
-    </button>
-  `;
-
-  return buttonElem;
 };
 
 let keyboardNav;
@@ -306,7 +239,7 @@ class Gnav {
 
   imsReady = async () => {
     const tasks = [
-      this.decorateProfile,
+      this.decorateUtilnav,
     ];
     try {
       for await (const task of tasks) {
@@ -318,54 +251,77 @@ class Gnav {
     }
   };
 
-  decorateProfile = async () => {
-    const { rawElem, decoratedElem } = this.blocks.profile;
-    if (!rawElem) return;
-
-    const isSignedInUser = window.adobeIMS.isSignedInUser();
-
-    // If user is not signed in, decorate the 'Sign In' element
-    if (!isSignedInUser) {
-      await decorateSignIn({ rawElem, decoratedElem });
-      return;
+  // eslint-disable-next-line class-methods-use-this
+  decorateUtilnav = async () => {
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('feds-utilnav');
+    document.querySelector('.feds-nav-wrapper').insertAdjacentElement('afterend', placeholder);
+    loadStyle('https://dev.adobeccstatic.com/unav/1.0/UniversalNav.css');
+    await loadScript('https://dev.adobeccstatic.com/unav/1.0/UniversalNav.js');
+    const children = [
+      {
+        name: 'app-switcher',
+        attributes: {},
+      },
+      {
+        name: 'help',
+        attributes: {
+          children:
+            [
+              {
+                type: 'Support',
+                title: 'Support',
+              },
+              {
+                type: 'Community',
+                title: 'Community',
+              },
+              // {
+              //   type: 'Jarvis',
+              //   title: 'Jarvis',
+              //   appid: 'test',
+              // },
+            ],
+        },
+      },
+      {
+        name: 'profile',
+        attributes: {},
+      },
+      // {
+      //   name: 'notifications',
+      //   attributes: {
+      //     notificationsConfig: {
+      //       applicationContext: {
+      //         appID: 'sample_ans_app_id',
+      //       }
+      //     },
+      //   },
+      // },
+    ];
+    let profile;
+    if (window.adobeIMS?.isSignedInUser()) {
+      profile = await window.adobeIMS.getProfile();
     }
-
-    // If user is signed in, decorate the profile avatar
-    const accessToken = window.adobeIMS.getAccessToken();
-    const { env } = getConfig();
-    const headers = new Headers({ Authorization: `Bearer ${accessToken.token}` });
-    const profileData = await fetch(`https://${env.adobeIO}/profile`, { headers });
-
-    if (profileData.status !== 200) {
-      return;
-    }
-
-    const { sections, user: { avatar } } = await profileData.json();
-
-    this.blocks.profile.buttonElem = await decorateProfileTrigger({ avatar });
-    decoratedElem.append(this.blocks.profile.buttonElem);
-
-    // Decorate the profile dropdown
-    // after user interacts with button or after 3s have passed
-    let decorationTimeout;
-
-    const decorateDropdown = async (e) => {
-      this.blocks.profile.buttonElem.removeEventListener('click', decorateDropdown);
-      clearTimeout(decorationTimeout);
-      await this.loadDelayed();
-      this.blocks.profile.dropdownInstance = new this.ProfileDropdown({
-        rawElem,
-        decoratedElem,
-        avatar,
-        sections,
-        buttonElem: this.blocks.profile.buttonElem,
-        // If the dropdown has been decorated due to a click, open it
-        openOnInit: e instanceof Event,
-      });
-    };
-
-    this.blocks.profile.buttonElem.addEventListener('click', decorateDropdown);
-    decorationTimeout = setTimeout(decorateDropdown, CONFIG.delays.loadDelayed);
+    window.UniversalNav({
+      target: placeholder,
+      env: 'dev',
+      theme: 'light',
+      locale: 'en_US',
+      children,
+      accessToken: window.adobeIMS.getAccessToken()?.token,
+      imsClientId: 'milo',
+      userId: profile?.userId,
+      analyticsContext: {
+        consumer: {
+          name: 'UniversalNavSampleApp',
+          version: '1.0',
+          platform: 'WEB',
+          client_id: 'SampleAppClientID',
+        },
+        event: { visitor_guid: 'sample_visitor_guid' },
+      },
+    });
   };
 
   loadSearch = () => {
@@ -655,6 +611,10 @@ class Gnav {
   };
 
   decorateSearch = () => {
+    if (true) {
+      return false;
+    }
+
     const searchBlock = this.body.querySelector('.search');
 
     if (!searchBlock) return null;

@@ -371,7 +371,7 @@ header.global-navigation {
 }
 
 /* Profile styles - to be removed after IMS takes over the profile */
-.feds-profile {
+.feds-utilnav {
   display: flex;
   align-items: center;
   font-size: 14px;
