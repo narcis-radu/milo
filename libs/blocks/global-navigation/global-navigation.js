@@ -141,7 +141,8 @@ class Gnav {
         return;
       }
       lanaLog({ message: 'GNAV: Error with IMS', e, tags: 'errorType=info,module=gnav' });
-    });
+    })
+    .finally(() => this.decorateUtilnav());
 
   decorateTopNav = () => {
     this.elements.mobileToggle = this.decorateToggle();
@@ -238,9 +239,7 @@ class Gnav {
   };
 
   imsReady = async () => {
-    const tasks = [
-      this.decorateUtilnav,
-    ];
+    const tasks = [];
     try {
       for await (const task of tasks) {
         await yieldToMain();
@@ -253,11 +252,16 @@ class Gnav {
 
   // eslint-disable-next-line class-methods-use-this
   decorateUtilnav = async () => {
+    const unav = new URLSearchParams(window.location.search)?.get('utilnav');
+    if (unav === 'off') {
+      return;
+    }
+
     const placeholder = document.createElement('div');
     placeholder.classList.add('feds-utilnav');
     document.querySelector('.feds-nav-wrapper').insertAdjacentElement('afterend', placeholder);
-    loadStyle('https://dev.adobeccstatic.com/unav/1.0/UniversalNav.css');
-    await loadScript('https://dev.adobeccstatic.com/unav/1.0/UniversalNav.js');
+    loadStyle('https://prod.adobeccstatic.com/unav/1.0/UniversalNav.css');
+    await loadScript('https://prod.adobeccstatic.com/unav/1.0/UniversalNav.js');
     const children = [
       {
         name: 'app-switcher',
@@ -288,16 +292,10 @@ class Gnav {
         name: 'profile',
         attributes: {},
       },
-      // {
-      //   name: 'notifications',
-      //   attributes: {
-      //     notificationsConfig: {
-      //       applicationContext: {
-      //         appID: 'sample_ans_app_id',
-      //       }
-      //     },
-      //   },
-      // },
+      {
+        name: 'notifications',
+        attributes: { notificationsConfig: { applicationContext: { appID: 'fedsmilo' } } },
+      },
     ];
     let profile;
     if (window.adobeIMS?.isSignedInUser()) {
@@ -305,21 +303,21 @@ class Gnav {
     }
     window.UniversalNav({
       target: placeholder,
-      env: 'dev',
+      env: 'prod',
       theme: 'light',
       locale: 'en_US',
       children,
       accessToken: window.adobeIMS.getAccessToken()?.token,
-      imsClientId: 'milo',
+      imsClientId: 'fedsmilo',
       userId: profile?.userId,
       analyticsContext: {
         consumer: {
-          name: 'UniversalNavSampleApp',
+          name: 'adobe.com',
           version: '1.0',
           platform: 'WEB',
-          client_id: 'SampleAppClientID',
+          client_id: 'fedsmilo',
         },
-        event: { visitor_guid: 'sample_visitor_guid' },
+        event: { visitor_guid: profile?.userId },
       },
     });
   };
