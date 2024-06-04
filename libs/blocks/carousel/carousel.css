@@ -61,14 +61,6 @@
   left: -1.3rem;
 } */
 
-.container .carousel-previous {
-  transform: translateX(1.3rem);
-}
-
-.container .carousel-next {
-  display: none;
-}
-
 .carousel.no-buttons .carousel-previous,
 .carousel.no-buttons .carousel-next {
   display: none;
