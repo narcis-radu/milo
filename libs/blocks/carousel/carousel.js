@@ -17,26 +17,33 @@ const KEY_CODES = {
 };
 
 function decorateNextPreviousBtns() {
-  const previousBtn = createTag(
-    'button',
-    {
-      class: 'carousel-button carousel-previous',
-      'aria-label': 'Previous',
-      'data-toggle': 'previous',
-    },
-    ARROW_PREVIOUS_IMG,
-  );
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = `${base}/blocks/carousel/img/arrow.svg`;
+  img.height = 16;
+  img.width = 10;
+  img.loading = 'lazy';
+  btn.append(img);
+  // const previousBtn = createTag(
+  //   'button',
+  //   {
+  //     class: 'carousel-button carousel-previous',
+  //     'aria-label': 'Previous',
+  //     'data-toggle': 'previous',
+  //   },
+  //   ARROW_PREVIOUS_IMG,
+  // );
 
-  const nextBtn = createTag(
-    'button',
-    {
-      class: 'carousel-button carousel-next',
-      'aria-label': 'Next',
-      'data-toggle': 'next',
-    },
-    ARROW_NEXT_IMG,
-  );
-  return [previousBtn, nextBtn];
+  // const nextBtn = createTag(
+  //   'button',
+  //   {
+  //     class: 'carousel-button carousel-next',
+  //     'aria-label': 'Next',
+  //     'data-toggle': 'next',
+  //   },
+  //   ARROW_NEXT_IMG,
+  // );
+  return [btn, document.createElement('button')];
 }
 
 function decorateLightboxButtons() {
