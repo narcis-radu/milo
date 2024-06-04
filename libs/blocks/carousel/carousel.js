@@ -16,15 +16,14 @@ const KEY_CODES = {
 
 function decorateNextPreviousBtns() {
   const elements = [];
-  ['Previous', 'Next'].forEach((item) => {
-    const label = item.toLowerCase();
+  ['previous', 'next'].forEach((item) => {
     const btn = createTag('button', {
-      class: `carousel-button carousel-${label}`,
+      class: `carousel-button carousel-${item}`,
       'aria-label': item,
       'data-toggle': item,
     });
     const img = createTag('img', {
-      class: `${label}-icon`,
+      class: `${item}-icon`,
       alt: `${item} icon`,
       src: `${base}/blocks/carousel/img/arrow.svg`,
       height: 16,
