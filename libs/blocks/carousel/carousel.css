@@ -43,7 +43,6 @@
   top: calc(45% - var(--carousel-slide-button-height) / 2);
   transition: background .3s ease, outline .3s ease, border .3s ease, box-shadow .3s ease;
   z-index: 2;
-  min-height: var(--carousel-slide-button-height);
 }
 
 .carousel .carousel-next {

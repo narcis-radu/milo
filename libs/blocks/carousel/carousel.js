@@ -23,8 +23,7 @@ function decorateNextPreviousBtns() {
       class: 'carousel-button carousel-previous',
       'aria-label': 'Previous',
       'data-toggle': 'previous',
-    },
-    ARROW_PREVIOUS_IMG,
+    }
   );
 
   const nextBtn = createTag(
@@ -33,8 +32,7 @@ function decorateNextPreviousBtns() {
       class: 'carousel-button carousel-next',
       'aria-label': 'Next',
       'data-toggle': 'next',
-    },
-    ARROW_NEXT_IMG,
+    }
   );
   return [previousBtn, nextBtn];
 }
