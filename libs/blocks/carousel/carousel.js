@@ -25,6 +25,13 @@ function decorateNextPreviousBtns() {
       'data-toggle': 'previous',
     },
   );
+  const img = document.createElement('img');
+  img.setAttribute('src', `${base}/blocks/carousel/img/arrow.svg`);
+  img.setAttribute('width', 10);
+  img.setAttribute('height', 16);
+  img.setAttribute('loading', 'lazy');
+  img.setAttribute('alt', 'prev');
+  previousBtn.append(img);
 
   const nextBtn = createTag(
     'button',
