@@ -30,7 +30,7 @@ function decorateNextPreviousBtns() {
       width: 10,
       loading: 'lazy',
     });
-    btn.append(img);
+    // btn.append(img);
     elements.push(btn);
   });
 
