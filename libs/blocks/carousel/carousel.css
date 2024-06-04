@@ -45,7 +45,7 @@
   z-index: 2;
 }
 
-/* .carousel .carousel-next {
+.carousel .carousel-next {
   right: 0.3rem;
 }
 
@@ -59,7 +59,7 @@
 
 .container .carousel-previous {
   left: -1.3rem;
-} */
+}
 
 .carousel.no-buttons .carousel-previous,
 .carousel.no-buttons .carousel-next {
@@ -81,7 +81,7 @@
   outline: none;
 }
 
-.carousel .carousel-previous img,
+/* .carousel .carousel-previous img,
 .carousel .carousel-next img {
   height: 16px;
   width: 10px;
@@ -100,7 +100,7 @@
 .carousel .carousel-previous:focus img,
 .carousel .carousel-next:focus img {
   filter: brightness(0.5);
-}
+} */
 
 .carousel-slides {
   display: flex;
