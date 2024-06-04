@@ -1,6 +1,6 @@
-/* .text-block {
+.text-block {
   position: relative;
-} */
+}
 
 .dark .text-block,
 .text-block.dark {
@@ -84,10 +84,10 @@
 }
 
 /* Alignment */
-/* .text-block.center {
+.text-block.center {
   text-align: center;
   align-items: center;
-} */
+}
 
 .text-block.center .action-area,
 .text-block.center .icon-area { justify-content: center; }
