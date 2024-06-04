@@ -43,6 +43,7 @@
   top: calc(45% - var(--carousel-slide-button-height) / 2);
   transition: background .3s ease, outline .3s ease, border .3s ease, box-shadow .3s ease;
   z-index: 2;
+  min-height: var(--carousel-slide-button-height);
 }
 
 .carousel .carousel-next {
@@ -81,7 +82,7 @@
   outline: none;
 }
 
-/* .carousel .carousel-previous img,
+.carousel .carousel-previous img,
 .carousel .carousel-next img {
   height: 16px;
   width: 10px;
@@ -100,7 +101,7 @@
 .carousel .carousel-previous:focus img,
 .carousel .carousel-next:focus img {
   filter: brightness(0.5);
-} */
+}
 
 .carousel-slides {
   display: flex;
