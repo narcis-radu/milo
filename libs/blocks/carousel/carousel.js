@@ -364,8 +364,7 @@ export default function init(el) {
   }
 
   el.textContent = '';
-  el.append(slideWrapper);
-  el.append(...nextPreviousBtns);
+  el.append(slideWrapper, ...nextPreviousBtns);
 
   const dotsUl = createTag('ul', {
     class: 'carousel-indicators',
