@@ -45,7 +45,7 @@
   z-index: 2;
 }
 
-.carousel .carousel-next {
+/* .carousel .carousel-next {
   right: 0.3rem;
 }
 
@@ -59,7 +59,7 @@
 
 .container .carousel-previous {
   left: -1.3rem;
-}
+} */
 
 .carousel.no-buttons .carousel-previous,
 .carousel.no-buttons .carousel-next {
