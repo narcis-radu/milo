@@ -25,6 +25,11 @@
   overflow: hidden;
 }
 
+.carousel .previous-icon,
+.carousel .next-icon {
+  aspect-ratio: auto 10/16;
+}
+
 /* .carousel .carousel-previous,
 .carousel .carousel-next {
   background-color: var(--carousel-button-background-color);
