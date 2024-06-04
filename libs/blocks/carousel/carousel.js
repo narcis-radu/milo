@@ -365,6 +365,7 @@ export default function init(el) {
 
   el.textContent = '';
   el.append(slideWrapper);
+  el.append(...nextPreviousBtns);
 
   const dotsUl = createTag('ul', {
     class: 'carousel-indicators',
@@ -374,7 +375,7 @@ export default function init(el) {
   dotsUl.append(...slideIndicators);
   controlsContainer.append(dotsUl);
 
-  el.append(...nextPreviousBtns, controlsContainer);
+  el.append(controlsContainer);
 
   function handleDeferredImages() {
     const images = el.querySelectorAll('img[loading="lazy"]');
