@@ -3,6 +3,8 @@ import { createTag, getConfig, MILO_EVENTS } from '../../utils/utils.js';
 const { miloLibs, codeRoot } = getConfig();
 const base = miloLibs || codeRoot;
 
+const ARROW_NEXT_IMG = `<img class="next-icon" alt="Next icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
+const ARROW_PREVIOUS_IMG = `<img class="previous-icon" alt="Previous icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
 const LIGHTBOX_ICON = `<img class="expand-icon" alt="Expand carousel to full screen" src="${base}/blocks/carousel/img/expand.svg" height="14" width="20">`;
 const CLOSE_ICON = `<img class="expand-icon" alt="Expand carousel to full screen" src="${base}/blocks/carousel/img/close.svg" height="20" width="20">`;
 
@@ -15,26 +17,26 @@ const KEY_CODES = {
 };
 
 function decorateNextPreviousBtns() {
-  const elements = [];
-  ['previous', 'next'].forEach((item) => {
-    const btn = createTag('button', {
-      class: `carousel-button carousel-${item}`,
-      'aria-label': item,
-      'data-toggle': item,
-    });
-    const img = createTag('img', {
-      class: `${item}-icon`,
-      alt: `${item} icon`,
-      src: `${base}/blocks/carousel/img/arrow.svg`,
-      height: 16,
-      width: 10,
-      loading: 'lazy',
-    });
-    // btn.append(img);
-    elements.push(btn);
-  });
+  const previousBtn = createTag(
+    'button',
+    {
+      class: 'carousel-button carousel-previous',
+      'aria-label': 'Previous',
+      'data-toggle': 'previous',
+    },
+    ARROW_PREVIOUS_IMG,
+  );
 
-  return elements;
+  const nextBtn = createTag(
+    'button',
+    {
+      class: 'carousel-button carousel-next',
+      'aria-label': 'Next',
+      'data-toggle': 'next',
+    },
+    ARROW_NEXT_IMG,
+  );
+  return [previousBtn, nextBtn];
 }
 
 function decorateLightboxButtons() {
