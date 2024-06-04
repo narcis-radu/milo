@@ -25,7 +25,7 @@
   overflow: hidden;
 }
 
-.carousel .carousel-previous,
+/* .carousel .carousel-previous,
 .carousel .carousel-next {
   background-color: var(--carousel-button-background-color);
   border-radius: 100%;
@@ -100,7 +100,7 @@
 .carousel .carousel-previous:focus img,
 .carousel .carousel-next:focus img {
   filter: brightness(0.5);
-}
+} */
 
 .carousel-slides {
   display: flex;

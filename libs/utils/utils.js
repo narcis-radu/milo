@@ -316,14 +316,7 @@ export function loadLink(href, { as, callback, crossorigin, rel, fetchpriority }
       link.onload = (e) => callback(e.type);
       link.onerror = (e) => callback(e.type);
     }
-    if (link.href.includes('carousel.css')) {
-      setTimeout(() => {
-        document.head.appendChild(link);
-      }, 1000);
-    } else {
-      document.head.appendChild(link);
-    }
-    console.log('load');
+    document.head.appendChild(link);
   } else if (callback) {
     callback('noop');
   }

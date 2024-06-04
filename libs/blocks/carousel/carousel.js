@@ -3,8 +3,8 @@ import { createTag, getConfig, MILO_EVENTS } from '../../utils/utils.js';
 const { miloLibs, codeRoot } = getConfig();
 const base = miloLibs || codeRoot;
 
-const ARROW_NEXT_IMG = `<img loading="lazy" class="next-icon" alt="Next icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
-const ARROW_PREVIOUS_IMG = `<img loading="lazy" class="previous-icon" alt="Previous icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
+const ARROW_NEXT_IMG = `<img class="next-icon" alt="Next icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
+const ARROW_PREVIOUS_IMG = `<img class="previous-icon" alt="Previous icon" src="${base}/blocks/carousel/img/arrow.svg" height="16" width="10">`;
 const LIGHTBOX_ICON = `<img class="expand-icon" alt="Expand carousel to full screen" src="${base}/blocks/carousel/img/expand.svg" height="14" width="20">`;
 const CLOSE_ICON = `<img class="expand-icon" alt="Expand carousel to full screen" src="${base}/blocks/carousel/img/close.svg" height="20" width="20">`;
 
@@ -24,14 +24,8 @@ function decorateNextPreviousBtns() {
       'aria-label': 'Previous',
       'data-toggle': 'previous',
     },
+    ARROW_PREVIOUS_IMG,
   );
-  const img = document.createElement('img');
-  img.setAttribute('src', `${base}/blocks/carousel/img/arrow.svg`);
-  img.setAttribute('width', 10);
-  img.setAttribute('height', 16);
-  img.setAttribute('loading', 'lazy');
-  img.setAttribute('alt', 'prev');
-  previousBtn.append(img);
 
   const nextBtn = createTag(
     'button',
@@ -40,6 +34,7 @@ function decorateNextPreviousBtns() {
       'aria-label': 'Next',
       'data-toggle': 'next',
     },
+    ARROW_NEXT_IMG,
   );
   return [previousBtn, nextBtn];
 }
