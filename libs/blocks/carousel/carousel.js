@@ -20,7 +20,7 @@ function decorateNextPreviousBtns() {
   const previousBtn = createTag(
     'button',
     {
-      class: 'carousel-button carousel-previous',
+      class: 'carousel-button carousel-previous car-wait',
       'aria-label': 'Previous',
       'data-toggle': 'previous',
     },
@@ -30,7 +30,7 @@ function decorateNextPreviousBtns() {
   const nextBtn = createTag(
     'button',
     {
-      class: 'carousel-button carousel-next',
+      class: 'carousel-button carousel-next car-wait',
       'aria-label': 'Next',
       'data-toggle': 'next',
     },
@@ -43,7 +43,7 @@ function decorateLightboxButtons() {
   const expandBtn = createTag(
     'button',
     {
-      class: 'lightbox-button carousel-expand',
+      class: 'lightbox-button carousel-expand car-wait',
       'aria-label': 'Open in full screen',
     },
     LIGHTBOX_ICON,
@@ -51,7 +51,7 @@ function decorateLightboxButtons() {
   const closeBtn = createTag(
     'button',
     {
-      class: 'lightbox-button carousel-close',
+      class: 'lightbox-button carousel-close car-wait',
       'aria-label': 'Close full screen carousel',
     },
     CLOSE_ICON,
@@ -342,7 +342,7 @@ export default function init(el) {
   const fragment = new DocumentFragment();
   const nextPreviousBtns = decorateNextPreviousBtns();
   const slideIndicators = decorateSlideIndicators(slides);
-  const controlsContainer = createTag('div', { class: 'carousel-controls' });
+  const controlsContainer = createTag('div', { class: 'carousel-controls car-wait' });
 
   fragment.append(...slides);
   const slideWrapper = createTag('div', { class: 'carousel-wrapper' });
@@ -366,7 +366,7 @@ export default function init(el) {
   }
 
   el.textContent = '';
-  el.append(slideWrapper, ...nextPreviousBtns);
+  el.append(slideWrapper);
 
   const dotsUl = createTag('ul', {
     class: 'carousel-indicators',
@@ -376,7 +376,18 @@ export default function init(el) {
   dotsUl.append(...slideIndicators);
   controlsContainer.append(dotsUl);
 
-  el.append(controlsContainer);
+  el.append(...nextPreviousBtns, controlsContainer);
+  const x = new Promise((resolve) => {
+    el.querySelector('.previous-icon').onload = resolve;
+  });
+
+  const y = new Promise((resolve) => {
+    el.querySelector('.next-icon').onload = resolve;
+  });
+
+  const z = new Promise((resolve) => {
+    setTimeout(resolve, 100);
+  });
 
   function handleDeferredImages() {
     const images = el.querySelectorAll('img[loading="lazy"]');
@@ -395,4 +406,8 @@ export default function init(el) {
   }
   slides.slice(NoOfVisibleSlides).forEach((slide) => slide.querySelectorAll('a').forEach((focusableElement) => { focusableElement.setAttribute('tabindex', -1); }));
   handleChangingSlides(carouselElements);
+
+  Promise.all([x, y, z]).then(() => {
+    [...document.querySelectorAll('.car-wait')].forEach((x) => x.classList.remove('car-wait'));
+  });
 }

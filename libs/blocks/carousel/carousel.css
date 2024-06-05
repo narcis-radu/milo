@@ -45,6 +45,10 @@
   z-index: 2;
 }
 
+.car-wait {
+  visibility: hidden;
+}
+
 .carousel .carousel-next {
   right: 0.3rem;
 }
