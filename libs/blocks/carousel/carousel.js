@@ -407,7 +407,10 @@ export default function init(el) {
   slides.slice(NoOfVisibleSlides).forEach((slide) => slide.querySelectorAll('a').forEach((focusableElement) => { focusableElement.setAttribute('tabindex', -1); }));
   handleChangingSlides(carouselElements);
 
-  Promise.all([x, y, z]).then(() => {
-    [...document.querySelectorAll('.car-wait')].forEach((x) => x.classList.remove('car-wait'));
-  });
+  const changes = () => {
+    [...document.querySelectorAll('.car-wait')].forEach((x) => x.classList.remove('car-wait'))
+    parentArea.removeAttribute(MILO_EVENTS.DEFERRED, changes, true);
+  };
+
+  parentArea.addEventListener(MILO_EVENTS.DEFERRED, changes, true);
 }
