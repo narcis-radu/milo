@@ -25,7 +25,7 @@
       "environments": [ "edit" ],
       "isPalette": true,
       "paletteRect": "top: auto; bottom: 25px; left: 25px; height: 388px; width: 360px;",
-      "url": "/tools/library?skipConsent=true",
+      "url": "/tools/sidekick/library?skipConsent=true",
       "includePaths": [ "**.docx**" ]
     },
     {
